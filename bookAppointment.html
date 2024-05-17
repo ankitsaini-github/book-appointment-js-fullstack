@@ -64,6 +64,7 @@
     window.addEventListener('DOMContentLoaded',()=>{
         axios.get('http://localhost:3000/admin/users')
         .then((response)=>{
+            console.log(response);
             for(let i=0;i<response.data.length;i++){
                 showOnScreen(response.data[i])
             }
@@ -87,7 +88,7 @@
         // li.appendChild(document.createTextNode(appointment.time));
         //adding id div
         var uid=document.createElement('div')
-        uid.appendChild(document.createTextNode(appointment._id))
+        uid.appendChild(document.createTextNode(appointment.id))
         uid.setAttribute('id','uid');
         uid.style.display='none'
         li.appendChild(uid)
@@ -126,8 +127,11 @@
             .catch((err)=>{console.log(err)})
         }
         else{
-            axios.put('https://crudcrud.com/api/'+crudKey+'/Appointments/'+uid,newappointment)
+            newappointment.userId=uid;
+            console.log(newappointment);
+            axios.post('http://localhost:3000/admin/edit-user',newappointment)
             .then((response)=>{
+                console.log(response)
             //showOnScreen(response.data)
             location.reload()
             })
@@ -143,8 +147,12 @@
             if(confirm('Want to DELETE appointment ?')){
                 var li=e.target.parentElement;
                 var uid=li.childNodes[5].firstChild.textContent;
-                axios.delete('https://crudcrud.com/api/'+crudKey+'/Appointments/'+uid)
-                .then((res)=>{itemlist.removeChild(li);})
+                console.log(uid);
+                axios.post('http://localhost:3000/admin/delete-user',{userId:uid})
+                .then((res)=>{
+                    console.log(res);
+                    itemlist.removeChild(li);
+                })
                 .catch((err)=>{console.log(err)})
             }
         }

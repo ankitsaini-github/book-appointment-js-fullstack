@@ -3,7 +3,7 @@ const User = require('../models/users');
 // get all users
 exports.getUsers = (req, res, next) => {
   User.findAll().then(result => {
-    console.log('ALL USERSSSSSSSSSSSS ======= ',result)
+    // console.log('ALL USERSSSSSSSSSSSS ======= ',result)
     res.send(result);
   }).catch(err => console.log(err));
 };
@@ -18,7 +18,8 @@ exports.postAddUser = (req, res, next) => {
     email: email,
     phone: phone
   }).then(result => {
-    console.log(result);
+    // console.log(result);
+    res.send(result);
   }).catch(err => console.log(err))
 };
 
@@ -33,19 +34,19 @@ exports.postEditUser = (req, res, next) => {
   const updatedName = req.body.name;
   const updatedEmail = req.body.email;
   const updatedPhone = req.body.phone;
-  const updatedUser = new User(
-    userId,
-    updatedName,
-    updatedEmail,
-    updatedPhone
-  );
-  updatedUser.save();
-  res.redirect('/');
+
+  User.findOne({ where: { id: userId } }).then(user => {
+    user.name = updatedName;
+    user.email = updatedEmail;
+    user.phone = updatedPhone;
+    return user.save();
+  }).then(()=>{
+    res.send('User Updated successfully');
+  }).catch(err => console.log(err))
 };
 
 // delete user
-exports.postDeleteProduct = (req, res, next) => {
+exports.postDeleteUser = (req, res, next) => {
   const userId = req.body.userId;
-  User.deleteById(userId);
-  res.redirect('/');
+  User.destroy({ where: { id: userId } }).then(result=>res.send('User Deleted')).catch(err=>console.log(err));
 };

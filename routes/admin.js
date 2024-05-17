@@ -18,8 +18,8 @@ router.post('/add-user', adminController.postAddUser);
 
 // router.get('/edit-product/:productId', adminController.getEditProduct);
 
-// router.post('/edit-user', adminController.postEditUser);
+router.post('/edit-user', adminController.postEditUser);
 
-// router.post('/delete-user', adminController.postDeleteUser);
+router.post('/delete-user', adminController.postDeleteUser);
 
 module.exports = router;
